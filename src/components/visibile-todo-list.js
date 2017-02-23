@@ -1,6 +1,6 @@
 import React from 'react'
 import TodoList from './todo-list'
-import {store, getVisibleTodos, toggle_todo} from '../reducers/store'
+import {store, getVisibleTodos, toggle_todo} from '../store'
 
 export default class extends React.Component {
   componentDidMount() {
@@ -15,7 +15,7 @@ export default class extends React.Component {
     return (
       <TodoList 
         todos={getVisibleTodos(state)}
-        onTodoClick={id => toggle_todo(id)}
+        onTodoClick={id => store.dispatch(toggle_todo(id))}
       />
     )
   }

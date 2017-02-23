@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from './button'
-import {store, set_visibility_filter} from '../reducers/store'
+import {store, set_visibility_filter} from '../store'
 
 export default class extends React.Component {
   componentDidMount() {
@@ -15,7 +15,7 @@ export default class extends React.Component {
     return (
       <Button 
         active={state.visibilityFilter !== props.filter}
-        onClick={() => set_visibility_filter(props.filter)}
+        onClick={() => store.dispatch(set_visibility_filter(props.filter))}
       >
         {props.children}
       </Button>
