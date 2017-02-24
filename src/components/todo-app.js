@@ -5,7 +5,7 @@ import VisibleTodoList from './visibile-todo-list'
 import Footer from './footer'
 
 
-export default () => {
+export default ({params}) => {
   return (
     <div className='primary-list'>
       <h1 className='title'>TODOAPPP</h1>
@@ -13,10 +13,10 @@ export default () => {
       <VisibleTodoList />
       <Footer />
       <style>{`
-      .primary-list {
-        max-width: 400px;
-        margin: 0 auto;
-      }
+        .primary-list {
+          max-width: 400px;
+          margin: 0 auto;
+        }
       `}</style>
     </div>
   )

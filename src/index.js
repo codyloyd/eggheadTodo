@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
-import TodoApp from './components/todo-app'
+import Root from './components/root'
 
 ReactDOM.render(
-  <TodoApp />,
+  <Root />,
   document.getElementById('root')
 )
