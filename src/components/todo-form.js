@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import {add_todo_to_list} from '../store'
+import {add_todo_to_list} from '../actions'
 
 const TodoForm = ({ dispatch }) => {
   let input

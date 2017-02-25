@@ -2,8 +2,8 @@ import React, {Component}from 'react'
 import { connect } from 'react-redux'
 import {  withRouter } from 'react-router'
 import TodoList from './todo-list'
-import { getVisibleTodos, toggle_todo, receive_todos} from '../store'
-import {fetchTodos} from '../db'
+import { getVisibleTodos} from '../store'
+import * as actions from '../actions'
 
 class VisibleTodoList extends Component {
   componentDidMount() {
@@ -14,13 +14,12 @@ class VisibleTodoList extends Component {
       this.fetchData()
   }
   fetchData() {
-    const {filter, receive_todos} = this.props
-    fetchTodos(filter).then(todos => 
-      receive_todos(filter, todos)
-    )
+    const {filter, fetchTodos} = this.props
+    fetchTodos(filter)
   }
   render() {
-    return <TodoList {...this.props}/>
+    const { toggle_todo, ...rest} = this.props
+    return <TodoList {...rest} onTodoClick={toggle_todo}/>
   }
 }
 
@@ -34,7 +33,7 @@ const mapStateToProps = (state, { params }) => {
 
 VisibleTodoList = withRouter(connect(
   mapStateToProps,
-  {onTodoClick: toggle_todo, receive_todos}
+  actions
 )(VisibleTodoList))
 
 export default VisibleTodoList
