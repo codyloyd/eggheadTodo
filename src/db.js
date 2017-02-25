@@ -23,5 +23,3 @@ export const fetchTodos = (filter) =>
     }
   })
 
-
-fetchTodos('all')

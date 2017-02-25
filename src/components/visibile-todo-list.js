@@ -1,35 +1,40 @@
-import React from 'react'
-import {withRouter} from 'react-router'
+import React, {Component}from 'react'
+import { connect } from 'react-redux'
+import {  withRouter } from 'react-router'
 import TodoList from './todo-list'
-import {store, getVisibleTodos, toggle_todo, fetchTodos} from '../store'
+import { getVisibleTodos, toggle_todo, receive_todos} from '../store'
+import {fetchTodos} from '../db'
 
-export default withRouter(
-  class extends React.Component {
-    componentDidMount() {
-      this.unsubscribe = store.subscribe(() => this.forceUpdate())
-      this.fetchData()
-    }
-    componentDidUpdate (previousProps) {
-      if (this.props.params.filter !== previousProps.params.filter) {
-        this.fetchData()
-      }
-    }
-    fetchData () {
-      const filter = this.props.params.filter || 'all'
-      store.dispatch(fetchTodos(filter))
-    }
-    componentWillUnmount() {
-      this.unsubscribe()
-    }
-    render() {
-      const props = this.props
-      const state = store.getState()
-      return (
-        <TodoList 
-          todos={getVisibleTodos(state.todos, this.props.params.filter || 'all')}
-          onTodoClick={id => store.dispatch(toggle_todo(id))}
-        />
-      )
-    }
+class VisibleTodoList extends Component {
+  componentDidMount() {
+    this.fetchData()
   }
-)
+  componentDidUpdate(prevProps) {
+    if (this.props.filter !== prevProps.filter) 
+      this.fetchData()
+  }
+  fetchData() {
+    const {filter, receive_todos} = this.props
+    fetchTodos(filter).then(todos => 
+      receive_todos(filter, todos)
+    )
+  }
+  render() {
+    return <TodoList {...this.props}/>
+  }
+}
+
+const mapStateToProps = (state, { params }) => {
+  const filter = params.filter || 'all'
+  return {
+    todos: getVisibleTodos(state.todos, filter),
+    filter
+  }
+}
+
+VisibleTodoList = withRouter(connect(
+  mapStateToProps,
+  {onTodoClick: toggle_todo, receive_todos}
+)(VisibleTodoList))
+
+export default VisibleTodoList

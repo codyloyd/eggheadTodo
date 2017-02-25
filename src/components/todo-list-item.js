@@ -1,14 +1,14 @@
 import React from 'react'
 
-export default ({id, completed, text, onTodoClick}) => {
+export default ({id, completed, text, onClick}) => {
   return (
     <tr>
       <td
-        onClick={() => onTodoClick(id)}
-        key={id}>
+        onClick={onClick}
+      >
         <span className='subtitle'
           style={completed ? {'color': '#ccc', 'textDecoration': `line-through`}: {}} 
-          >
+        >
           {text}
         </span>
       </td>

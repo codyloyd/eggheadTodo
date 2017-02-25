@@ -1,5 +1,4 @@
 import React from 'react'
-
 import TodoForm from './todo-form'
 import VisibleTodoList from './visibile-todo-list'
 import Footer from './footer'

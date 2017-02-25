@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 
-export default ({filter, children}) => (
+const FilterLink = ({filter, children}) => (
   <Link 
     to={filter === 'all' ? '/' : filter}
     activeStyle={{
@@ -11,3 +11,10 @@ export default ({filter, children}) => (
     {children}
   </Link>
 )
+
+FilterLink.propTypes = {
+  filter: PropTypes.oneOf(['all', 'completed', 'active']).isRequired,
+  children: PropTypes.node.isRequired
+}
+
+export default FilterLink

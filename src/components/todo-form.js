@@ -1,13 +1,14 @@
-import React from 'react'
-import {store, add_todo_to_list} from '../store'
+import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
+import {add_todo_to_list} from '../store'
 
-export default props => {
+const TodoForm = ({ dispatch }) => {
   let input
   return (
     <form onSubmit={(e) => {
         e.preventDefault()
         if (input.value) {
-          store.dispatch(add_todo_to_list(input.value))
+          dispatch(add_todo_to_list(input.value))
           input.value = ''
         }
           input.focus()        
@@ -19,3 +20,8 @@ export default props => {
     </form>
   )
 }
+
+TodoForm.propTypes = {
+  dispatch: PropTypes.func.isRequired
+}
+export default connect()(TodoForm)

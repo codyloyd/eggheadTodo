@@ -21,7 +21,7 @@ const store = createStore(todoApp, applyMiddleware(logger))
 store.dispatch = addPromiseSupportToDispatch(store)
 export {store}
 
-const receive_todos = (filter, response) => ({
+export const receive_todos = (filter, response) => ({
   type: 'RECEIVE_TODOS',
   filter,
   response

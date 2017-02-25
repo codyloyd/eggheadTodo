@@ -1,21 +1,30 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 
 import TodoListItem from './todo-list-item'
 
-export default props => {
+const TodoList = ({todos, onTodoClick}) => {
   return (
     <table className='table is-narrow'>
       <thead><tr><th>TODOS</th></tr></thead>
       <tbody>
-      {props.todos.map(todo => 
+      {todos.map(todo => 
         <TodoListItem 
           key={todo.id} 
-          onTodoClick={props.onTodoClick} 
-          text={todo.text}
-          completed={todo.completed}
-          id={todo.id}
+          {...todo}
+          onClick={() => onTodoClick(todo.id)} 
         />)}
       </tbody>
     </table>
   )
 }
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired
+  }).isRequired).isRequired,
+  onTodoClick: PropTypes.func.isRequired,
+}
+
+export default TodoList
