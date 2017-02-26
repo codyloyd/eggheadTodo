@@ -2,7 +2,7 @@ import React, {Component}from 'react'
 import { connect } from 'react-redux'
 import {  withRouter } from 'react-router'
 import TodoList from './todo-list'
-import { getVisibleTodos} from '../store'
+import { getVisibleTodos} from '../reducers/todos'
 import * as actions from '../actions'
 
 class VisibleTodoList extends Component {
