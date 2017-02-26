@@ -1,9 +1,9 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
     case 'RECEIVE_TODOS':
-      const nextState = {...state}
+      const nextState = { ...state }
       action.response.forEach(todo => {
         nextState[todo.id] = todo
       })
@@ -25,7 +25,7 @@ const allIds = (state = [], action) => {
 
 const activeIds = (state = [], action) => {
   if (action.filter !== 'active') return state
-  switch(action.type) {
+  switch (action.type) {
     case 'RECEIVE_TODOS':
       return action.response.map(todo => todo.id)
     default:
@@ -35,7 +35,7 @@ const activeIds = (state = [], action) => {
 
 const completedIds = (state = [], action) => {
   if (action.filter !== 'completed') return state
-  switch(action.type) {
+  switch (action.type) {
     case 'RECEIVE_TODOS':
       return action.response.map(todo => todo.id)
     default:
@@ -49,7 +49,7 @@ const idsByFilter = combineReducers({
   completed: completedIds
 })
 
-const todos = combineReducers({byId, idsByFilter})
+const todos = combineReducers({ byId, idsByFilter })
 export default todos
 
 export const getVisibleTodos = (state, filter) => {
