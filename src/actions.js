@@ -1,28 +1,44 @@
 import * as db from './db'
 import {getIsFetching} from './reducers'
-
-const request_todos = (filter) => ({
-  type: 'REQUEST_TODOS',
-  filter
-})
-
-const receive_todos = (filter, response) => ({
-  type: 'RECEIVE_TODOS',
-  filter,
-  response
-})
+import {normalize} from 'normalizr'
+import * as schema from './schema'
 
 export const fetchTodos = (filter) => (dispatch, getState) => {
   if (getIsFetching(getState(), filter)) return Promise.resolve()
-  dispatch(request_todos(filter))
+  dispatch({
+    type: 'FETCH_TODOS_REQUEST',
+    filter
+  })
 
-  return db.fetchTodos(filter).then(response => 
-    dispatch(receive_todos(filter, response))
-  )
+  return db.fetchTodos(filter).then(
+    response => {
+      dispatch({
+        type: 'FETCH_TODOS_SUCCESS',
+        filter,
+        response: normalize(response, schema.arrayOfTodos)
+      })
+    },
+    error => {
+      dispatch({
+        type: 'FETCH_TODOS_FAILURE',
+        filter,
+        message: error.message || 'Something went wrong'
+      })
+    })
 }
 
-export const add_todo_to_list = (text, id) => 
-  ({type: 'ADD_TODO', text, id: cuid()})
+export const add_todo_to_list = (text) => (dispatch) =>
+  db.addTodo(text).then(response => {
+    dispatch({
+      type: 'ADD_TODO_SUCCESS',
+      response: normalize(response, schema.todo)
+    })
+  })
 
-export const toggle_todo = (id) => 
-  ({type: 'TOGGLE_TODO', id})
+export const toggle_todo = (id) => (dispatch) =>
+  db.toggleTodo(id).then(response => {
+    dispatch({
+      type: 'TOGGLE_TODO_SUCCESS',
+      response: normalize(response, schema.todo)
+    })
+  })

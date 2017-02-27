@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import cuid from 'cuid'
 
 var config = {
   apiKey: "AIzaSyCe8A1cKiwFbTdxMHorfJZo9iwF1rLuaNs",
@@ -9,17 +10,39 @@ var config = {
 };
 firebase.initializeApp(config);
 
-export const fetchTodos = (filter) => 
-  firebase.database().ref('todos/').once('value').then(snapshot => {
+export const fetchTodos = (filter) => {
+  return firebase.database().ref('todos/').once('value').then(snapshot => {
+    const todos = Object.values(snapshot.val())
     switch (filter) {
       case 'all':
-        return snapshot.val()
+        return todos
       case 'active':
-        return snapshot.val().filter(t => !t.completed)
+        return todos.filter(t => !t.completed)
       case 'completed':
-        return snapshot.val().filter(t => t.completed)
+        return todos.filter(t => t.completed)
       default:
-        return snapshot.val() 
+        return todos 
     }
   })
+}
 
+export const addTodo = (text) => {
+  const newTodo = firebase.database().ref('todos/').push()
+  const todo = {
+    id: newTodo.key,
+    text,
+    completed: false
+  }
+  return newTodo.set(todo).then(() => {
+    return todo
+  })
+}
+
+export const toggleTodo = (id) => {
+  const todo = firebase.database().ref('todos/' + id)
+  return todo.once('value').then(data => {
+    const toggledTodo = {...data.val(), completed: !data.val().completed}
+    return todo.set(toggledTodo)
+      .then(() => toggledTodo)
+  })
+}
